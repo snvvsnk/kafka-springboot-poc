@@ -15,5 +15,13 @@ public class OrderConsumer {
     @KafkaListener(topics = "orders-topic", groupId = "poc-consumer-group")
     public void consume(OrderEvent order) {
         log.info("Received order: {}", order);
+
+        if (order.quantity() <= 0) {
+            log.error("Order quantity should be greater than 0");
+            throw new IllegalArgumentException("Order quantity should be greater than 0");
+
+        }
+
+        log.info("Successfully processed order: {}", order.orderId());
     }
 }
